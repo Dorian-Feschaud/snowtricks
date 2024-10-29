@@ -1,0 +1,19 @@
+
+{% block title %}Users{% endblock %}
+
+{% block body %}
+
+<div class="">
+    <h1>Users</h1>
+    <a href="{{ path('app_register') }}"><h2>Ajouter un user</h2></a>
+    <div class="">
+        {% for user in users %}
+            <a href="{{ path('app_user_show', {id: user.id}) }}"><h3>{{ user.email }}</h3></a>
+            <p>{{ user.firstname }}</p>
+            <p>{{ user.lastname }}</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
