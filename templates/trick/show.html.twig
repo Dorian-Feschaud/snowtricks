@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trick{% endblock %}
+
+{% block body %}
+
+<div class="">
+    <h1>{{ trick.name }}</h1>
+    <div class="">
+        {% for media in trick.medias %}
+                <p>{{ media.url }}</p>
+                <p>{{ media.type }}</p>
+        {% endfor %}
+        <p>{{ trick.description }}</p>
+        <p>{{ trick.groupe.name }}</p>
+        <a href="{{ path('app_trick_edit', {id: trick.id}) }}">Modifier</a>
+        <a href="{{ path('app_trick_delete', {id: trick.id}) }}">Supprimer</a>
+    </div>
+</div>
+
+{% endblock %}
