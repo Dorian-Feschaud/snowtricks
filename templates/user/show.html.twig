@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+
+<div class="">
+    <h1>{{ user.email }}</h1>
+    <div class="">
+        <p>{{ user.firstname }}</p>
+        <p>{{ user.lastname }}</p>
+        {% for role in user.roles %}
+            <p>{{ role }}</p>
+        {% endfor %}
+        <img src="{{ user.image }}"/>
+        <a href="{{ path('app_user_edit', {id: user.id}) }}">Modifier</a>
+        <a href="{{ path('app_user_delete', {id: user.id}) }}">Supprimer</a>
+    </div>
+</div>
+
+{% endblock %}
