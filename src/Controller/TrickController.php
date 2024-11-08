@@ -32,4 +32,23 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $manager): Response
+    {
+        $trick = new Trick();
+        $form = $this->createForm(TrickType::class, $trick);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($trick);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_trick');
+        }
+
+        return $this->render('trick/new.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
 }
