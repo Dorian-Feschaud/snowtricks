@@ -84,4 +84,22 @@ class UserController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+    #[Route('/{id}/edit', name: 'app_user_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function edit(User $user, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($user);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_user');
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'form' => $form,
+        ]);
+    }
+    
 }
