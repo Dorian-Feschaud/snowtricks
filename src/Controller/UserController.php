@@ -101,5 +101,14 @@ class UserController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function delete(User $user, Request $request, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($user);
+        $manager->flush();
+
+        return $this->redirectToRoute('app_user');
+    }
     
 }
