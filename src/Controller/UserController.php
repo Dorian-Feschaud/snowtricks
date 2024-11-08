@@ -27,5 +27,13 @@ class UserController extends AbstractController
             'users' => $users,
         ]);
     }
-    
+
+    #[Route('/{id}', name: 'app_user_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function show(User $user): Response
+    {
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
 }
