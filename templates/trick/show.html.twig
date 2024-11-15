@@ -8,13 +8,33 @@
     <h1>{{ trick.name }}</h1>
     <div class="">
         {% for media in trick.medias %}
-                <p>{{ media.url }}</p>
-                <p>{{ media.type }}</p>
+            <p>{{ media.url }}</p>
+            <p>{{ media.type }}</p>
         {% endfor %}
         <p>{{ trick.description }}</p>
         <p>{{ trick.groupe.name }}</p>
+        <p>{{ trick.user.firstname }}</p>
+        <p>{{ trick.user.lastname }}</p>
         <a href="{{ path('app_trick_edit', {id: trick.id}) }}">Modifier</a>
         <a href="{{ path('app_trick_delete', {id: trick.id}) }}">Supprimer</a>
+        <h2>Commentaires :</h2>
+        <div class="">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="">Submit</button>
+            {{ form_end(form) }}
+        </div>
+        {% if comments is empty %}
+            <p>Aucun commentaires pour le moment</p>
+        {% else %}
+            {% for comment in comments %}
+                <img src="{{ comment.user.image }}" alt="user-image"/>
+                <p>{{ comment.user.firstname }}</p>
+                <p>{{ comment.user.lastname }}</p>
+                <p>{{ comment.message }}</p>
+                <p>{{ comment.createdAt|date("d/m/Y") }}</p>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 
