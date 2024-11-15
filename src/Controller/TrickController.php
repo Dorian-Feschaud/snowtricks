@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +27,26 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trick_show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function show(Trick $trick): Response
+    #[Route('/{id}', name: 'app_trick_show', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute('app_trick_show', ['id' => $trick->getId()]);
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'comments' => $trick->getComments(),
+            'form' => $form
         ]);
     }
 
@@ -40,6 +58,7 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $trick->setUser($this->getUser());
             $manager->persist($trick);
             $manager->flush();
 
@@ -61,7 +80,7 @@ class TrickController extends AbstractController
             $manager->persist($trick);
             $manager->flush();
 
-            return $this->redirectToRoute('app_trick');
+            return $this->redirectToRoute('app_trick', ['id' => $trick->getId()]);
         }
 
         return $this->render('trick/edit.html.twig', [
@@ -70,7 +89,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_trick_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function delete(Trick $trick, Request $request, EntityManagerInterface $manager): Response
+    public function delete(Trick $trick, EntityManagerInterface $manager): Response
     {
         $manager->remove($trick);
         $manager->flush();
