@@ -6,6 +6,7 @@ use App\Entity\Group;
 use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +19,7 @@ class TrickType extends AbstractType
             ->add('description')
             ->add('groupe', EntityType::class, [
                 'class' => Group::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }
