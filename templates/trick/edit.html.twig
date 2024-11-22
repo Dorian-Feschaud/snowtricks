@@ -9,6 +9,11 @@
     <div class="">
         {{ form_start(form) }}
         {{ form_widget(form) }}
+        {% for media in trick.medias %}
+            {% set file = 'uploads/medias/' ~ media.url %}
+            <img src="{{ asset(file) }}"/>
+            <p>{{ media.type }}</p>
+        {% endfor %}
         <button type="submit" class="">Submit</button>
         {{ form_end(form) }}
     </div>
