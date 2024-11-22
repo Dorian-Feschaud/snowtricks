@@ -12,7 +12,8 @@
         {% for role in user.roles %}
             <p>{{ role }}</p>
         {% endfor %}
-        <img src="{{ user.image }}"/>
+        {% set image = 'uploads/images/' ~ user.image %}
+        <img src="{{ asset(image) }}"/>
         <a href="{{ path('app_user_edit', {id: user.id}) }}">Modifier</a>
         <a href="{{ path('app_user_delete', {id: user.id}) }}">Supprimer</a>
     </div>
