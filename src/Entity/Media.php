@@ -14,6 +14,9 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $original_filename = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $url = null;
 
     #[ORM\Column(length: 255)]
@@ -26,6 +29,18 @@ class Media
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getOriginalFilename(): ?string
+    {
+        return $this->original_filename;
+    }
+
+    public function setOriginalFilename(string $original_filename): static
+    {
+        $this->original_filename = $original_filename;
+
+        return $this;
     }
 
     public function getUrl(): ?string
