@@ -8,7 +8,8 @@
     <h1>{{ trick.name }}</h1>
     <div class="">
         {% for media in trick.medias %}
-            <p>{{ media.url }}</p>
+            {% set file = 'uploads/medias/' ~ media.url %}
+            <img src="{{ asset(file) }}"/>
             <p>{{ media.type }}</p>
         {% endfor %}
         <p>{{ trick.description }}</p>
