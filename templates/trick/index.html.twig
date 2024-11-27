@@ -13,8 +13,15 @@
             <p>{{ trick.description }}</p>
             <p>{{ trick.groupe.name }}</p>
             {% for media in trick.medias %}
-                <img src="{{ asset(media.filename, 'medias') }}"/>
-                <p>{{ media.type }}</p>
+                {% if media.type == 'TYPE_IMAGE' %}
+                    <img src="{{ asset(media.filename, 'medias') }}"/>
+                {% elseif media.type == 'TYPE_VIDEO' %}
+                    <video controls>
+                        <source src="{{ asset(media.filename, 'medias') }}" type="video/mp4"/>
+                    </video>
+                {% else %}
+                    <p>Le fichier n'est pas reconnu</p>
+                {% endif %}
             {% endfor %}
         {% endfor %}
     </div>
