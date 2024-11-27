@@ -10,6 +10,7 @@ class Media
 {
     final public const TYPE_IMAGE = 'TYPE_IMAGE';
     final public const TYPE_VIDEO = 'TYPE_VIDEO';
+    final public const TYPE_UNKNOWN = 'TYPE_UNKNOWN';
  
     #[ORM\Id]
     #[ORM\GeneratedValue]
