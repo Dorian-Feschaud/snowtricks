@@ -127,10 +127,19 @@ class AppFixtures extends Fixture
         foreach($tricks as $trick) {
             $nb_medias = $count - $this->faker->numberBetween(0, 2);
             for ($i = 0; $i < $nb_medias; $i++) {
+                $media_type = $this->faker->randomElement([Media::TYPE_IMAGE, Media::TYPE_VIDEO]);
+                switch ($media_type) {
+                    case 'TYPE_IMAGE':
+                        $filename = 'default_trick_pic_1.jpg';
+                        break;
+                    case 'TYPE_VIDEO':
+                        $filename = 'default_trick_video.mp4';
+                        break;
+                }
                 $media = new Media();
-                $media->setOriginalFilename('default_trick_pic_1.jpg');
-                $media->setFilename('default_trick_pic_1.jpg');
-                $media->setType('image');
+                $media->setOriginalFilename($filename);
+                $media->setFilename($filename);
+                $media->setType($media_type);
                 $media->setTrick($trick);
     
                 $entities[] = $media;
