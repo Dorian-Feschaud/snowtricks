@@ -13,7 +13,8 @@
             <p>{{ trick.description }}</p>
             <p>{{ trick.groupe.name }}</p>
             {% for media in trick.medias %}
-                <p>{{ media.url }}</p>
+                {% set file = 'uploads/medias/' ~ media.url %}
+                <img src="{{ asset(file) }}"/>
                 <p>{{ media.type }}</p>
             {% endfor %}
         {% endfor %}

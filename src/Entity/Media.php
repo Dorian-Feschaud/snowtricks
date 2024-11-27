@@ -8,13 +8,19 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
 {
+    final public const TYPE_IMAGE = 'TYPE_IMAGE';
+    final public const TYPE_VIDEO = 'TYPE_VIDEO';
+ 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $url = null;
+    private ?string $original_filename = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $filename = null;
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
@@ -28,14 +34,26 @@ class Media
         return $this->id;
     }
 
-    public function getUrl(): ?string
+    public function getOriginalFilename(): ?string
     {
-        return $this->url;
+        return $this->original_filename;
     }
 
-    public function setUrl(string $url): static
+    public function setOriginalFilename(string $original_filename): static
     {
-        $this->url = $url;
+        $this->original_filename = $original_filename;
+
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): static
+    {
+        $this->filename = $filename;
 
         return $this;
     }
