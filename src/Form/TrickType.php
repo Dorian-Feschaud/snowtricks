@@ -26,19 +26,8 @@ class TrickType extends AbstractType
             ->add('medias', FileType::class, [
                 'multiple' => true,
                 'required' => false,
-                'label' => 'Images',
+                'label' => 'Fichiers (Images, Vidéos)',
                 'mapped' => false,
-                // 'constraints' => [
-                //     new File([
-                //         'maxSize' => '1024k',
-                //         'mimeTypes' => [
-                //             'image/png',
-                //             'image/jpg',
-                //             'image/jpeg',
-                //         ],
-                //         'mimeTypesMessage' => 'Please upload a valid png, jpg or jpeg document',
-                //     ])
-                // ],
             ])
             ->get('medias')->addModelTransformer(new CallbackTransformer(
                 function($medias) {
