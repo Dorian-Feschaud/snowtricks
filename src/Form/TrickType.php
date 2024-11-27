@@ -10,6 +10,7 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 
 class TrickType extends AbstractType
@@ -28,6 +29,22 @@ class TrickType extends AbstractType
                 'required' => false,
                 'label' => 'Fichiers (Images, Vidéos)',
                 'mapped' => false,
+                'constraints' => [
+                    new All([
+                        'constraints' => [
+                            new File([
+                                'maxSize' => '1024000k',
+                                'mimeTypes' => [
+                                    'image/png',
+                                    'image/jpg',
+                                    'image/jpeg',
+                                    'video/mp4'
+                                ],
+                                'mimeTypesMessage' => 'Please upload a valid png, jpg, jpeg or mp4 document',
+                            ])
+                        ],
+                    ])
+                ]
             ])
             ->get('medias')->addModelTransformer(new CallbackTransformer(
                 function($medias) {
