@@ -67,29 +67,30 @@ class TrickController extends AbstractController
             /** @var Collection<int, UploadedFile> $mediaFiles */
             $mediaFiles = $form->get('medias')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($mediaFiles) {
                 foreach($mediaFiles as $mediaFile) {
                     $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
                     $safeFilename = $slugger->slug($originalFilename);
                     $extension = $mediaFile->guessExtension();
                     $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
 
-                    // Move the file to the directory where brochures are stored
                     try {
                         $mediaFile->move($mediasDirectory, $newFilename);
                     } catch (FileException $e) {
                         // ... handle exception if something happens during file upload
                     }
-
-                    // updates the 'brochureFilename' property to store the PDF file name
-                    // instead of its contents
                     $media = new Media();
                     $media->setOriginalFilename($originalFilename);
                     $media->setFilename($newFilename);
-                    $media->setType($extension);
+                    if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
+                        $media->setType(Media::TYPE_IMAGE);
+                    }
+                    else if (in_array($extension, ['mp4'])) {
+                        $media->setType(Media::TYPE_VIDEO);
+                    }
+                    else {
+                        $media->setType(Media::TYPE_UNKNOWN);
+                    }
                     $manager->persist($media);
                     $trick->addMedia($media);
                 }
@@ -118,25 +119,19 @@ class TrickController extends AbstractController
             /** @var Collection<int, UploadedFile> $mediaFiles */
             $mediaFiles = $form->get('medias')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($mediaFiles) {
                 foreach($mediaFiles as $mediaFile) {
                     $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
                     $safeFilename = $slugger->slug($originalFilename);
                     $extension = $mediaFile->guessExtension();
                     $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
 
-                    // Move the file to the directory where brochures are stored
                     try {
                         $mediaFile->move($mediasDirectory, $newFilename);
                     } catch (FileException $e) {
                         // ... handle exception if something happens during file upload
                     }
 
-                    // updates the 'brochureFilename' property to store the PDF file name
-                    // instead of its contents
                     $media = $manager->getRepository(Media::class)->findOneBy(array('original_filename' => $originalFilename, 'trick' => $trick));
                     if (!$media) {
                         $media = new Media();                        
@@ -153,7 +148,15 @@ class TrickController extends AbstractController
                         }
                     }
                     $media->setFilename($newFilename);
-                    $media->setType($extension);
+                    if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
+                        $media->setType(Media::TYPE_IMAGE);
+                    }
+                    else if (in_array($extension, ['mp4'])) {
+                        $media->setType(Media::TYPE_VIDEO);
+                    }
+                    else {
+                        $media->setType(Media::TYPE_UNKNOWN);
+                    }
                     $manager->persist($media);
                     $trick->addMedia($media);
                 }
