@@ -80,7 +80,7 @@ class TrickController extends AbstractController
                         // ... handle exception if something happens during file upload
                     }
                     $media = new Media();
-                    $media->setOriginalFilename($originalFilename);
+                    $media->setOriginalFilename($originalFilename.$extension);
                     $media->setFilename($newFilename);
                     if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
                         $media->setType(Media::TYPE_IMAGE);
@@ -135,7 +135,7 @@ class TrickController extends AbstractController
                     $media = $manager->getRepository(Media::class)->findOneBy(array('original_filename' => $originalFilename, 'trick' => $trick));
                     if (!$media) {
                         $media = new Media();                        
-                        $media->setOriginalFilename($originalFilename);
+                        $media->setOriginalFilename($originalFilename.$extension);
                     }
                     else {
                         $filesystem = new Filesystem();
