@@ -128,7 +128,8 @@ class AppFixtures extends Fixture
             $nb_medias = $count - $this->faker->numberBetween(0, 2);
             for ($i = 0; $i < $nb_medias; $i++) {
                 $media = new Media();
-                $media->setUrl('default_trick_pic_1.jpg');
+                $media->setOriginalFilename('default_trick_pic_1.jpg');
+                $media->setFilename('default_trick_pic_1.jpg');
                 $media->setType('image');
                 $media->setTrick($trick);
     

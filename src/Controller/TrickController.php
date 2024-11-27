@@ -88,7 +88,7 @@ class TrickController extends AbstractController
                     // instead of its contents
                     $media = new Media();
                     $media->setOriginalFilename($originalFilename);
-                    $media->setUrl($newFilename);
+                    $media->setFilename($newFilename);
                     $media->setType($extension);
                     $manager->persist($media);
                     $trick->addMedia($media);
@@ -145,16 +145,14 @@ class TrickController extends AbstractController
                     else {
                         $filesystem = new Filesystem();
                         try {
-                            // $filesystem->remove(['', '/public/uploads/medias', $media->getUrl()]);
-                            // $filesystem->remove('/public/uploads/medias/'.$media->getUrl());
-                            $path = $this->getParameter("public_directory") . '/uploads/medias/' . $media->getUrl();
+                            $path = $this->getParameter("public_directory") . '/uploads/medias/' . $media->getFilename();
                             $filesystem->remove($path);
                         }
                         catch (Exception $e) {
                             throw new Exception();
                         }
                     }
-                    $media->setUrl($newFilename);
+                    $media->setFilename($newFilename);
                     $media->setType($extension);
                     $manager->persist($media);
                     $trick->addMedia($media);
