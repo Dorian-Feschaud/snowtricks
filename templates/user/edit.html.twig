@@ -9,8 +9,7 @@
     <div class="">
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        {% set image = 'uploads/images/' ~ user.image %}
-        <img src="{{ asset(image) }}"/>
+        <img src="{{ asset(user.image, 'images') }}"/>
         <button type="submit" class="">Submit</button>
         {{ form_end(form) }}
     </div>
