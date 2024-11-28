@@ -22,10 +22,17 @@ class DefaultController extends AbstractController
     {
         $trickRepository = $this->em->getRepository(Trick::class);
 
-        $tricks = $trickRepository->findBy([], null, 3, null);
+        $tricks = $trickRepository->findAll();
+
+        $medias = [];
+
+        foreach ($tricks as $trick) {
+            $medias[] = $trick->getThumbnail();
+        }
 
         return $this->render('index.html.twig', [
-            'tricks' => $tricks
+            'tricks' => $tricks,
+            'medias' => $medias
         ]);
     }
 }
