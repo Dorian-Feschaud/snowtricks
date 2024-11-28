@@ -1,0 +1,11 @@
+footer {
+    background-color: #546A7B;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+}
+
+.footer-item {
+    color: white;
+}
