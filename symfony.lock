@@ -94,6 +94,7 @@
             "./assets/app.js",
             "./assets/styles/app.css",
             "./assets/styles/home.css",
+            "./assets/styles/header.css",
             "./config/packages/asset_mapper.yaml",
             "./importmap.php"
         ]
