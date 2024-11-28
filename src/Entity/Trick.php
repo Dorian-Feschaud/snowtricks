@@ -163,4 +163,16 @@ class Trick
 
         return $this;
     }
+
+    public function getThumbnail(): String {
+        $medias = $this->getMedias();
+
+        foreach ($medias as $media) {
+            if ($media->getType() == Media::TYPE_IMAGE) {
+                return $media->getFilename();
+            }
+        }
+
+        return 'default_trick_pic_1.jpg';
+    }
 }
