@@ -1,0 +1,30 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #546A7B;
+    padding: 1rem 2rem;
+}
+
+.header-logo {
+    width: 100px;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+}
+
+.header-nav-link-container {
+    display: flex;
+    list-style: none;
+    gap: 1rem;
+}
+
+.header-nav-separator {
+    color: white;
+}
+
+.header-nav-link-item-link {
+    text-decoration: none;
+    color: white;
+}
