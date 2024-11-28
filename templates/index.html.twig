@@ -12,4 +12,27 @@
     </div>
 </div>
 
+<div class="">
+    <h1>Liste des figures</h1>
+    {# <a href="{{ path('app_trick_new') }}"><h2>Ajouter un trick</h2></a> #}
+    <div class="">
+        {% for trick in tricks %}
+            <a href="{{ path('app_trick_show', {id: trick.id}) }}"><h3>{{ trick.name }}</h3></a>
+            <p>{{ trick.description }}</p>
+            <p>{{ trick.groupe.name }}</p>
+            {% for media in trick.medias %}
+                {% if media.type == 'TYPE_IMAGE' %}
+                    <img src="{{ asset(media.filename, 'medias') }}"/>
+                {% elseif media.type == 'TYPE_VIDEO' %}
+                    <video controls>
+                        <source src="{{ asset(media.filename, 'medias') }}" type="video/mp4"/>
+                    </video>
+                {% else %}
+                    <p>Le fichier n'est pas reconnu</p>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
