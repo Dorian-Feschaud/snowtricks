@@ -19,6 +19,8 @@ framework:
 
     assets:
         packages:
+            public:
+                base_path: ''
             images:
                 base_path: 'uploads/images'
             medias:
