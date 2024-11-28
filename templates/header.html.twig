@@ -1,0 +1,32 @@
+<header>
+    <img class="header-logo" src="{{ asset('default_trick_pic_1.jpg', 'medias') }}"/>
+    <nav class="header-nav">
+        <ul class="header-nav-link-container">
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_default') }}">Accueil</a>
+            </li>
+            <li class="header-nav-separator">|</li>
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_trick') }}">Figures</a>
+            </li>
+            <li class="header-nav-separator">|</li>
+            {% if app.user %}
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_user_show', {id: app.user.id}) }}">Profil</a>
+            </li>
+            <li class="header-nav-separator">|</li>
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_logout') }}">Déconnexion</a>
+            </li>
+            {% else %}
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_login') }}">Se connecter</a>
+            </li>
+            <li class="header-nav-separator">|</li>
+            <li class="header-nav-link-item">
+                <a class="header-nav-link-item-link" href="{{ path('app_register') }}">Créer un compte</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
