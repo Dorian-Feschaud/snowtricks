@@ -37,6 +37,7 @@ class TrickController extends AbstractController
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
+        $thumbnail = $trick->getThumbnail();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,7 +52,8 @@ class TrickController extends AbstractController
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'comments' => $trick->getComments(),
-            'form' => $form
+            'form' => $form,
+            'thumbnail' => $thumbnail
         ]);
     }
 
