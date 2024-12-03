@@ -1,0 +1,89 @@
+.trick-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.trick-header {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trick-thumbnail {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.trick-options {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.trick-option-item {
+    text-decoration: none;
+}
+
+.edit-trick {
+    color: green;
+}
+
+.delete-trick {
+    color: red;
+}
+
+.trick-title {
+    color: #546A7B;
+    font-size: 4rem;
+    text-align: center;
+    z-index: 1;
+}
+
+.trick-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin: 0 10rem;
+}
+
+.trick-media-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+}
+
+.trick-media-item {
+    width: 100%;
+}
+.trick-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0 10rem;
+}
+
+.trick-content-main-informations {
+
+}
+
+.trick-content-main-informations-item {
+    text-align: center;
+}
+
+.trick-content-secondary-informations {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.trick-content-secondary-informations-item {
+    border: solid 2px #546A7B;
+    border-radius: 7px;
+    padding: 0.5rem 1rem;
+}
