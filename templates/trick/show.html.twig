@@ -21,6 +21,7 @@
         </div>
         <h1 class="trick-title">{{ trick.name }}</h1>
     </div>
+    <div class="trick-separator"></div>
     <div class="trick-body">
         <div class="trick-media-container">
         {% for media in trick.medias %}
@@ -45,23 +46,29 @@
                 {# <p class="trick-content-secondary-informations-item">{{ trick.createdAt|date("d/m/y") }}</p> #}
             </div>
         </div>
-        <h2>Commentaires :</h2>
-        <div class="">
+        <div class="trick-separator"></div>
+        <div class="add-comment">
             {{ form_start(form) }}
             {{ form_widget(form) }}
-            <button type="submit" class="">Submit</button>
+            <button type="submit" id="btn-add-comment">Ajouter un commentaire</button>
             {{ form_end(form) }}
         </div>
+        <div class="trick-separator"></div>
         {% if comments is empty %}
             <p>Aucun commentaires pour le moment</p>
         {% else %}
+            <div class="trick-comments-container">
             {% for comment in comments %}
-                <img src="{{ comment.user.image }}" alt="user-image"/>
-                <p>{{ comment.user.firstname }}</p>
-                <p>{{ comment.user.lastname }}</p>
-                <p>{{ comment.message }}</p>
-                <p>{{ comment.createdAt|date("d/m/Y") }}</p>
+                <div class="trick-comment-item">
+                    <img class="trick-comment-user-image" src="{{ asset(comment.user.image, 'images') }}"/>
+                    <div class="trick-comment-content">
+                        <p class="trick-comment-author">{{ comment.user.firstname }} {{ comment.user.lastname }}</p>
+                        <p class="trick-comment-message">{{ comment.message }}</p>
+                        <p class="trick-comment-date">{{ comment.createdAt|date("d/m/Y") }}</p>
+                    </div>
+                </div>
             {% endfor %}
+            </div>
         {% endif %}
     </div>
 </div>
