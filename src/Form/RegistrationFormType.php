@@ -38,14 +38,6 @@ class RegistrationFormType extends AbstractType
                     ])
                 ],
             ])
-            ->get('image')->addModelTransformer(new CallbackTransformer(
-                function($image) {
-                    return null;
-                },
-                function($image) {
-                    return $image;
-                }
-            ))
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -62,7 +54,15 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
+                ])
+                ->get('image')->addModelTransformer(new CallbackTransformer(
+                    function($image) {
+                        return null;
+                    },
+                    function($image) {
+                        return $image;
+                    }
+                ))
         ;
     }
 
