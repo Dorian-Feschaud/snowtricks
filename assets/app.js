@@ -10,5 +10,8 @@ import './styles/home.css';
 import './styles/header.css';
 import './styles/footer.css';
 import './styles/trick.css';
+import './styles/form.css';
+import './styles/reset-password.css';
+import './styles/user.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
