@@ -53,7 +53,7 @@ class AppFixtures extends Fixture
         $user_1->setFirstname('Admin');
         $user_1->setLastname('Admin');
         $user_1->setEmail('admin@example.com');
-        $user_1->setRoles([User::ROLE_ADMIN]);
+        $user_1->setRoles(['ROLE_ADMIN']);
         $user_1->setImage('user_default_pic.png');
         $user_1->setPassword($this->hasher->hashPassword($user_1, 'admin'));
 
@@ -65,7 +65,7 @@ class AppFixtures extends Fixture
         $user_2->setFirstname('Moderator');
         $user_2->setLastname('Moderator');
         $user_2->setEmail('moderator@example.com');
-        $user_2->setRoles([User::ROLE_MODERATOR]);
+        $user_2->setRoles(['ROLE_MODERATOR']);
         $user_2->setImage('user_default_pic.png');
         $user_2->setPassword($this->hasher->hashPassword($user_2, 'moderator'));
 
