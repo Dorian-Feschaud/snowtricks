@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -24,6 +25,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class UserController extends AbstractController
 {
     #[Route('', name: 'app_user')]
+    #[IsGranted('ROLE_ADMIN')]
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
@@ -34,8 +36,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('ROLE_MEMBER')]
     public function show(User $user): Response
     {
+        if ($user !== $this->getUser()) {
+            return $this->redirectToRoute('app_default');
+        }
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -73,12 +79,17 @@ class UserController extends AbstractController
                 // instead of its contents
                 $user->setImage($newFilename);
             }
+            else {
+                $user->setImage('user_default-pic.png');
+            }
 
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
+            $user->setRoles(['ROLE_MEMBER']);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -109,12 +120,14 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
+    #[IsGranted('ROLE_MEMBER')]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MEMBER')]
     public function edit(User $user, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $mediasDirectory, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -154,6 +167,9 @@ class UserController extends AbstractController
                 }
                 $user->setImage($newFilename);
             }
+            else {
+                $user->setImage('user_default-pic.png');
+            }
             $manager->persist($user);
             $manager->flush();
 
@@ -167,6 +183,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(User $user, Request $request, EntityManagerInterface $manager): Response
     {
         $manager->remove($user);

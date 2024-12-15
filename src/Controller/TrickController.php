@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Media;
 use App\Entity\Trick;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/trick')]
@@ -58,6 +60,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MODERATOR')]
     public function new(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, EntityManagerInterface $manager): Response
     {
         $trick = new Trick();
@@ -111,6 +114,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_trick_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MODERATOR')]
     public function edit(Trick $trick, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
@@ -177,6 +181,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_trick_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MODERATOR')]
     public function delete(Trick $trick, EntityManagerInterface $manager): Response
     {
         $manager->remove($trick);
