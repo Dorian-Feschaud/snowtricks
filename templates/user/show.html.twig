@@ -1,21 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block body %}
 
-<div class="">
-    <h1>{{ user.email }}</h1>
-    <div class="">
-        <p>{{ user.firstname }}</p>
-        <p>{{ user.lastname }}</p>
-        {% for role in user.roles %}
-            <p>{{ role }}</p>
-        {% endfor %}
-        <img src="{{ asset(user.image, 'images') }}"/>
-        <a href="{{ path('app_user_edit', {id: user.id}) }}">Modifier</a>
-        <a href="{{ path('app_user_delete', {id: user.id}) }}">Supprimer</a>
-    </div>
+<div class="user-container">
+    <img class="user-thumbnail" src="{{ asset(user.image, 'images') }}"/>
+    <h1>{{ user.firstname }} {{ user.lastname }}</h1>
+    <p>{{ user.email }}</p>
+    {% for role in user.roles %}
+        <p>{{ role|trans }}</p>
+    {% endfor %}
+    <a class="edit-user" href="{{ path('app_user_edit', {id: user.id}) }}"><button class="edit-user-btn">Modifier mon profil</button></a>
+    <a class="reset-password-user" href="{{ path('app_forgot_password_request') }}"><button class="reset-password-user-btn">Réinitialisation du mot de passe</button></a>
+    {# <a href="{{ path('app_user_delete', {id: user.id}) }}">Supprimer</a> #}
 </div>
 
 {% endblock %}

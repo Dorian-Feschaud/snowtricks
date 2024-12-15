@@ -1,11 +1,10 @@
 
-{% block title %}Users{% endblock %}
+{% block title %}Utilisateurs{% endblock %}
 
 {% block body %}
 
 <div class="">
-    <h1>Users</h1>
-    <a href="{{ path('app_register') }}"><h2>Ajouter un user</h2></a>
+    <h1>Utilisateurs</h1>
     <div class="">
         {% for user in users %}
             <a href="{{ path('app_user_show', {id: user.id}) }}"><h3>{{ user.email }}</h3></a>
