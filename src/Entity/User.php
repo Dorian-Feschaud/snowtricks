@@ -15,9 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    final public const ROLE_ADMIN = 'ROLE_ADMIN';
-    final public const ROLE_MODERATOR = 'ROLE_MODERATOR';
-    final public const ROLE_MEMBER = 'ROLE_MEMBER';
     
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -100,6 +97,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        
+        $roles[] = 'ROLE_MEMBER';
 
         return array_unique($roles);
     }
