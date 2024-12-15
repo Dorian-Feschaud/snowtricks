@@ -1,0 +1,19 @@
+.user-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-thumbnail {
+    width: 200px;
+    margin-bottom: 2rem;
+}
+
+.edit-user-btn, .reset-password-user-btn {
+    border: none;
+    background-color: #546A7B;
+    padding: 0.5rem 1rem;
+    color: white;
+}
