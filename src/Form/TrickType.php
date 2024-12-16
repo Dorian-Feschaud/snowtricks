@@ -40,6 +40,24 @@ class TrickType extends AbstractType
                     'class' => 'form-item'
                 ]
             ])
+            ->add('thumbnail', FileType::class, [
+                'row_attr' => [
+                    'class' => 'form-item'
+                ],
+                'label' => 'Image principale',
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid png, jpg or jpeg document',
+                    ])
+                ],
+            ])
             ->add('medias', FileType::class, [
                 'row_attr' => [
                     'class' => 'form-item'
@@ -64,16 +82,25 @@ class TrickType extends AbstractType
                         ],
                     ])
                 ]
-            ])
-            ->get('medias')->addModelTransformer(new CallbackTransformer(
+            ]);
+
+            $builder->get('thumbnail')->addModelTransformer(new CallbackTransformer(
+                function($thumbnail) {
+                    return null;
+                },
+                function($thumbnail) {
+                    return $thumbnail;
+                }
+            ));
+
+            $builder->get('medias')->addModelTransformer(new CallbackTransformer(
                 function($medias) {
                     return null;
                 },
                 function($medias) {
                     return $medias;
                 }
-            ))
-        ;
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

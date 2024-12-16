@@ -6,7 +6,12 @@
 
 {{ form_start(form) }}
 <h1 class="form-title">Modification d'un trick</h1>
-{{ form_widget(form) }}
+{{ form_row(form.name) }}
+{{ form_row(form.description) }}
+{{ form_row(form.groupe) }}
+{{ form_row(form.thumbnail) }}
+<img class="form-existing-thumbnail" src="{{ asset(trick.thumbnail, 'medias') }}"/>
+{{ form_row(form.medias) }}
 <div class="form-existing-medias">
 {% for media in trick.medias %}
     {% if media.type == 'TYPE_IMAGE' %}

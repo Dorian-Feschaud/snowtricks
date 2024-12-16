@@ -48,6 +48,9 @@ class Trick
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $thumbnail = null;
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -167,18 +170,6 @@ class Trick
         return $this;
     }
 
-    public function getThumbnail(): String {
-        $medias = $this->getMedias();
-
-        foreach ($medias as $media) {
-            if ($media->getType() == Media::TYPE_IMAGE) {
-                return $media->getFilename();
-            }
-        }
-
-        return 'default_trick_pic_1.jpg';
-    }
-
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -187,6 +178,19 @@ class Trick
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?String
+    {
+
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

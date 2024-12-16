@@ -24,15 +24,8 @@ class DefaultController extends AbstractController
 
         $tricks = $trickRepository->findAll();
 
-        $medias = [];
-
-        foreach ($tricks as $trick) {
-            $medias[] = $trick->getThumbnail();
-        }
-
         return $this->render('index.html.twig', [
             'tricks' => $tricks,
-            'medias' => $medias
         ]);
     }
 }

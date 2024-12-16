@@ -37,6 +37,10 @@ form {
     gap: 1rem;
 }
 
+.form-existing-thumbnail {
+    width: 200px;
+}
+
 .form-existing-medias {
     display: flex;
     flex-wrap: wrap;
