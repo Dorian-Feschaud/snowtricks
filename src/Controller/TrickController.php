@@ -34,7 +34,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_trick_show', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/{slug}', name: 'app_trick_show', methods: ['GET', 'POST'])]
     public function show(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
         $comment = new Comment();
@@ -101,6 +101,7 @@ class TrickController extends AbstractController
                 }
             }
 
+            $trick->setSlug($slugger->slug($trick->getName()));
             $trick->setUser($this->getUser());
             $manager->persist($trick);
             $manager->flush();
@@ -113,7 +114,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_trick_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
     public function edit(Trick $trick, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, Request $request, EntityManagerInterface $manager): Response
     {
@@ -168,6 +169,7 @@ class TrickController extends AbstractController
                 }
             }
 
+            $trick->setSlug($slugger->slug($trick->getName()));
             $manager->persist($trick);
             $manager->flush();
 
@@ -180,7 +182,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'app_trick_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/{slug}/delete', name: 'app_trick_delete', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
     public function delete(Trick $trick, EntityManagerInterface $manager): Response
     {

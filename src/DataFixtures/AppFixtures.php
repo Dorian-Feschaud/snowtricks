@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
@@ -20,9 +21,12 @@ class AppFixtures extends Fixture
 
     private UserPasswordHasherInterface $hasher;
 
-    public function __construct(ObjectManager $manager, UserPasswordHasherInterface $hasher) {
+    private SluggerInterface $slugger;
+
+    public function __construct(ObjectManager $manager, UserPasswordHasherInterface $hasher, SluggerInterface $slugger) {
         $this->manager = $manager;
         $this->hasher = $hasher;
+        $this->slugger = $slugger;
 
         $this->faker = $this->createFaker();
     }
@@ -105,6 +109,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $count; $i++) {
             $trick = new Trick();
             $trick->setName(sprintf('Trick %s', $i));
+            $trick->setSlug($this->slugger->slug($trick->getName()));
             $trick->setDescription($this->faker->text());
             $trick->setGroupe($this->faker->randomElement($groups));
             $trick->setUser($this->faker->randomElement($users));
