@@ -71,6 +71,7 @@
 .home-trick-item {
     background-color: #546A7B;
     border: solid 2px #546A7B;
+    position: relative;
 }
 
 .home-trick-item-thumbnail {
@@ -85,4 +86,12 @@
     color: white;
     padding-left: 1rem;
     display: flex;
+}
+
+.home-trick-item-options {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
 }
