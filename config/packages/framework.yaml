@@ -25,6 +25,8 @@ framework:
                 base_path: 'uploads/images'
             medias:
                 base_path: 'uploads/medias'
+            thumbnails:
+                base_path: 'uploads/thumbnails'
 
 when@test:
     framework:

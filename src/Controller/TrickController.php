@@ -59,13 +59,49 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
-    public function new(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, EntityManagerInterface $manager): Response
+    public function new(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, EntityManagerInterface $manager): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $thumbnail */
+            $thumbnail = $form->get('thumbnail')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($thumbnail) {
+                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $extension = $thumbnail->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $thumbnail->move($mediasDirectory, $newFilename);
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+
+                $filesystem = new Filesystem();
+                try {
+                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail->getImage();
+                    $filesystem->remove($path);
+                }
+                catch (Exception $e) {
+                    throw new Exception();
+                }
+                $trick->setThumbnail($newFilename);
+            }
+            else {
+                $trick->setThumbnail('trick_default_thumbnail.jpg');
+            }
 
             /** @var Collection<int, UploadedFile> $mediaFiles */
             $mediaFiles = $form->get('medias')->getData();
@@ -78,7 +114,7 @@ class TrickController extends AbstractController
                     $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
 
                     try {
-                        $mediaFile->move($mediasDirectory, $newFilename);
+                        $mediaFile->move($thumbnailsDirectory, $newFilename);
                     } catch (FileException $e) {
                         // ... handle exception if something happens during file upload
                     }
@@ -114,12 +150,48 @@ class TrickController extends AbstractController
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
-    public function edit(Trick $trick, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, Request $request, EntityManagerInterface $manager): Response
+    public function edit(Trick $trick, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $thumbnail */
+            $thumbnail = $form->get('thumbnail')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($thumbnail) {
+                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $extension = $thumbnail->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $thumbnail->move($thumbnailsDirectory, $newFilename);
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+
+                $filesystem = new Filesystem();
+                try {
+                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail->getImage();
+                    $filesystem->remove($path);
+                }
+                catch (Exception $e) {
+                    throw new Exception();
+                }
+                $trick->setThumbnail($newFilename);
+            }
+            else {
+                $trick->setThumbnail('trick_default_thumbnail.jpg');
+            }
 
             /** @var Collection<int, UploadedFile> $mediaFiles */
             $mediaFiles = $form->get('medias')->getData();

@@ -46,6 +46,7 @@ class TrickType extends AbstractType
                 ],
                 'label' => 'Image principale',
                 'mapped' => false,
+                'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

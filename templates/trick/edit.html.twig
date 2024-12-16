@@ -10,7 +10,7 @@
 {{ form_row(form.description) }}
 {{ form_row(form.groupe) }}
 {{ form_row(form.thumbnail) }}
-<img class="form-existing-thumbnail" src="{{ asset(trick.thumbnail, 'medias') }}"/>
+<img class="form-existing-thumbnail" src="{{ asset(trick.thumbnail, 'thumbnails') }}"/>
 {{ form_row(form.medias) }}
 <div class="form-existing-medias">
 {% for media in trick.medias %}

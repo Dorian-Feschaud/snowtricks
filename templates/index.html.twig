@@ -19,7 +19,7 @@
         {% for i in range(0, tricks|length - 1) %}
             {% set trick = tricks[i] %}
             <div class="home-trick-item">
-                <img class="home-trick-item-thumbnail" src="{{ asset(trick.thumbnail, 'medias') }}"/>
+                <img class="home-trick-item-thumbnail" src="{{ asset(trick.thumbnail, 'thumbnails') }}"/>
                 <a class="home-trick-item-title" href="{{ path('app_trick_show', {slug: trick.slug}) }}"><h3>{{ trick.name }}</h3></a>
             </div>
         {% endfor %}
