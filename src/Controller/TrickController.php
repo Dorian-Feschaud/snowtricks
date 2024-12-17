@@ -263,7 +263,7 @@ class TrickController extends AbstractController
         $manager->remove($trick);
         $manager->flush();
 
-        return $this->redirectToRoute('app_trick');
+        return $this->redirectToRoute('app_default');
     }
     
 }
