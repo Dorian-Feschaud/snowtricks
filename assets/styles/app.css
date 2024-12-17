@@ -12,6 +12,11 @@ main {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    margin-top: 4rem;
+}
+
+.no-margin-top {
+    margin-top: 0 !important;
 }
 
 .alert {
