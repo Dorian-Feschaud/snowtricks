@@ -48,6 +48,7 @@
                 {# <p class="trick-content-secondary-informations-item">{{ trick.createdAt|date("d/m/y") }}</p> #}
             </div>
         </div>
+        {% if is_granted('ROLE_MEMBER') %}
         <div class="trick-separator"></div>
         <div class="add-comment">
             {{ form_start(form) }}
@@ -55,9 +56,10 @@
             <button type="submit" id="btn-add-comment">Ajouter un commentaire</button>
             {{ form_end(form) }}
         </div>
+        {% endif %}
         <div class="trick-separator"></div>
         {% if comments is empty %}
-            <p>Aucun commentaires pour le moment</p>
+            <p>Aucuns commentaires pour le moment</p>
         {% else %}
             <div class="trick-comments-container">
             {% for comment in comments %}
