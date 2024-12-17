@@ -155,3 +155,53 @@
 .trick-comment-date {
     align-self: self-end;
 }
+
+
+
+/* INDEX */
+
+.index-trick-container {
+    margin: 8rem 10rem;
+}
+
+.index-trick-title {
+    color: #546A7B;
+    font-size: 3rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.tricks-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.trick-item {
+    background-color: #546A7B;
+    border: solid 2px #546A7B;
+    position: relative;
+}
+
+.trick-item-thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.trick-item-title {
+    text-decoration: none;
+    color: white;
+    padding-left: 1rem;
+    display: flex;
+}
+
+.trick-item-options {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 5px;
+}

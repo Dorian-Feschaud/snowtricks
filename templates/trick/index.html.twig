@@ -4,25 +4,29 @@
 
 {% block body %}
 
-<div class="">
-    <h1>Tricks</h1>
-    <a href="{{ path('app_trick_new') }}"><h2>Ajouter un trick</h2></a>
-    <div class="">
-        {% for trick in tricks %}
-            <a href="{{ path('app_trick_show', {slug: trick.slug}) }}"><h3>{{ trick.name }}</h3></a>
-            <p>{{ trick.description }}</p>
-            <p>{{ trick.groupe.name }}</p>
-            {% for media in trick.medias %}
-                {% if media.type == 'TYPE_IMAGE' %}
-                    <img src="{{ asset(media.filename, 'medias') }}"/>
-                {% elseif media.type == 'TYPE_VIDEO' %}
-                    <video controls>
-                        <source src="{{ asset(media.filename, 'medias') }}" type="video/mp4"/>
-                    </video>
-                {% else %}
-                    <p>Le fichier n'est pas reconnu</p>
+<div class="index-trick-container">
+    <h2 class="index-trick-title">LISTE DES FIGURES</h2>
+    <div class="tricks-container">
+        {% for i in range(0, tricks|length - 1) %}
+            {% set trick = tricks[i] %}
+            <div class="trick-item">
+                <img class="trick-item-thumbnail" src="{{ asset(trick.thumbnail, 'thumbnails') }}"/>
+                <a class="trick-item-title" href="{{ path('app_trick_show', {slug: trick.slug}) }}"><h3>{{ trick.name }}</h3></a>
+                {% if is_granted('ROLE_MODERATOR') %}
+                <div class="trick-item-options">
+                    <a class="trick-option-item edit-trick" href="{{ path('app_trick_edit', {slug: trick.slug}) }}">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                        </svg>
+                    </a>
+                    <a class="trick-option-item delete-trick" href="{{ path('app_trick_delete', {slug: trick.slug}) }}">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                        </svg>
+                    </a>
+                </div>
                 {% endif %}
-            {% endfor %}
+            </div>
         {% endfor %}
     </div>
 </div>
