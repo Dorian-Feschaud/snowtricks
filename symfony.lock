@@ -100,6 +100,7 @@
             "./assets/styles/form.css",
             "./assets/styles/reset-password.css",
             "./assets/styles/user.css",
+            "./assets/styles/group.css",
             "./config/packages/asset_mapper.yaml",
             "./importmap.php"
         ]
