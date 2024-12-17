@@ -90,6 +90,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $count; $i++) {
             $group = new Group();
             $group->setName(sprintf('Group %s', $i));
+            $group->setSlug($this->slugger->slug($group->getName()));
 
             $entities[] = $group;
 
