@@ -184,7 +184,7 @@ class UserController extends AbstractController
 
     #[Route('/{id}/delete', name: 'app_user_delete', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(User $user, Request $request, EntityManagerInterface $manager): Response
+    public function delete(User $user, EntityManagerInterface $manager): Response
     {
         $manager->remove($user);
         $manager->flush();
