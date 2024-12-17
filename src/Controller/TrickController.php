@@ -67,7 +67,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->addFlash('success', 'Ajout du trick bien efféctué');
+            $this->addFlash('success', 'Ajout de la figure bien efféctué');
 
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
@@ -159,7 +159,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->addFlash('success', 'Modification du trick bien efféctué');
+            $this->addFlash('success', 'Modification de la figure bien efféctué');
 
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
@@ -247,7 +247,7 @@ class TrickController extends AbstractController
             $manager->persist($trick);
             $manager->flush();
 
-            return $this->redirectToRoute('app_trick', ['id' => $trick->getId()]);
+            return $this->redirectToRoute('app_trick');
         }
 
         return $this->render('trick/edit.html.twig', [
@@ -260,10 +260,12 @@ class TrickController extends AbstractController
     #[IsGranted('ROLE_MODERATOR')]
     public function delete(Trick $trick, EntityManagerInterface $manager): Response
     {
+        $this->addFlash('success', 'Figure bien supprimée');
+
         $manager->remove($trick);
         $manager->flush();
 
-        return $this->redirectToRoute('app_default');
+        return $this->redirectToRoute('app_trick');
     }
     
 }
