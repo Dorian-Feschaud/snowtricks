@@ -34,7 +34,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_trick_show', methods: ['GET', 'POST'])]
+    #[Route('/show/{slug}', name: 'app_trick_show', methods: ['GET', 'POST'])]
     public function show(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
         $comment = new Comment();
@@ -66,6 +66,8 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->addFlash('success', 'Ajout du trick bien efféctué');
 
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
@@ -100,7 +102,7 @@ class TrickController extends AbstractController
                 $trick->setThumbnail($newFilename);
             }
             else {
-                $trick->setThumbnail('trick_default_thumbnail.jpg');
+                $trick->setThumbnail('default_trick_thumbnail.jpg');
             }
 
             /** @var Collection<int, UploadedFile> $mediaFiles */
@@ -157,6 +159,8 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $this->addFlash('success', 'Modification du trick bien efféctué');
+
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
 
@@ -190,7 +194,7 @@ class TrickController extends AbstractController
                 $trick->setThumbnail($newFilename);
             }
             else {
-                $trick->setThumbnail('trick_default_thumbnail.jpg');
+                $trick->setThumbnail('default_trick_thumbnail.jpg');
             }
 
             /** @var Collection<int, UploadedFile> $mediaFiles */

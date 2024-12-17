@@ -13,6 +13,11 @@
     </head>
     <body>
         {% include 'header.html.twig' %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success {{ app.session.flashbag.peek('success')|length > 0 ? '' : 'mb-5' }}">
+                {{ message }}
+            </div>
+        {% endfor %}
         <main>{% block body %}{% endblock %}</main>
         {% include 'footer.html.twig' %}
     </body>
