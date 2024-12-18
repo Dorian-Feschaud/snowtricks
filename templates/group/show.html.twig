@@ -5,7 +5,7 @@
 {% block body %}
 
 <div class="group-container">
-    <h1>{{ group.name }}</h1>
+    <h1 class="group-title">{{ group.name }}</h1>
     <div class="group-options">
         <a class="" href="{{ path('app_group_edit', {slug: group.slug}) }}"><button class="edit-group-btn">Modifier le groupe</button></a>
         <a class="" href="{{ path('app_group_delete', {slug: group.slug}) }}"><button class="delete-group-btn">Supprimer le groupe</button></a>

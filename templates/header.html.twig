@@ -1,7 +1,7 @@
 <header>
-    <img class="header-logo" src="{{ asset('default_trick_pic_1.jpg', 'medias') }}"/>
+    <a href="{{ path('app_default') }}"><img class="header-logo" src="{{ asset('default_trick_pic_1.jpg', 'medias') }}"/></a>
     <nav class="header-nav">
-        <ul class="header-nav-link-container">
+        <ul id="header-nav-link-container">
             <li class="header-nav-link-item">
                 <a class="header-nav-link-item-link" href="{{ path('app_default') }}">Accueil</a>
             </li>
@@ -34,5 +34,20 @@
             </li>
             {% endif %}
         </ul>
+        <a href="javascript:void(0);" class="menu-icon" onclick="displayMenu()">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14"/>
+            </svg>
+        </a>
     </nav>
 </header>
+<script>
+function displayMenu() {
+    var elem = document.getElementById("header-nav-link-container");
+    if (elem.classList.contains("visible")) {
+      elem.classList.remove("visible");
+    } else {
+      elem.classList.add("visible");
+    }
+}
+</script>

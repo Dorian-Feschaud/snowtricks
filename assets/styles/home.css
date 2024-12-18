@@ -35,7 +35,7 @@
 }
 
 .home-header-title {
-    font-size: 8rem;
+    font-size: 6rem;
     color: #546A7B;
 
 }
@@ -101,4 +101,31 @@
     right: 5px;
     display: flex;
     gap: 5px;
+}
+
+
+
+/* MOBILE */
+
+@media only screen and (max-width: 768px) {
+
+    .home-header-content {
+        margin: 0 1rem;
+    }
+
+    .home-header-title {
+        font-size: 2rem;
+    }
+
+    .home-header-description {
+        font-size: 1rem;
+    }
+
+    .home-content-container {
+        margin: 0 1rem;
+    }
+
+    .home-tricks-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

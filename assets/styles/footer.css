@@ -9,4 +9,18 @@ footer {
 
 .footer-item {
     color: white;
+    text-align: center;
+}
+
+@media only screen and (max-width: 768px) {
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+    }
+
+    .footer-item-separator {
+        display: none;
+    }
 }

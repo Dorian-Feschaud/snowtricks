@@ -12,9 +12,10 @@ header {
 .header-nav {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
-.header-nav-link-container {
+#header-nav-link-container {
     display: flex;
     list-style: none;
     gap: 1rem;
@@ -27,4 +28,43 @@ header {
 .header-nav-link-item-link {
     text-decoration: none;
     color: white;
+}
+
+.menu-icon {
+    color: white;
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .visible {
+        display: flex !important;
+    }
+
+    header {
+        padding-right: 0;
+    }
+
+    #header-nav-link-container {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        right: 0;
+        top: -2rem;
+        height: calc(100vh - 1rem);
+        width: 50vw;
+        background-color: #546A7B;
+        z-index: 5;
+        border-left: solid 2px black;
+        padding: 2rem;
+    }
+
+    .menu-icon {
+        display: flex;
+        z-index: 10;
+        margin-right: 2rem;
+    }
+
+    .header-nav-separator {
+        display: none;
+    }
 }

@@ -6,10 +6,12 @@ form {
     gap: 1rem;
     border: solid 2px #546A7B;
     padding: 2rem;
+    margin: 0 10rem;
 }
 
 .form-title {
     color: #546A7B;
+    text-align: center;
 }
 
 .form-item {
@@ -54,4 +56,11 @@ form {
 
 textarea {
     resize: none;
+}
+
+@media screen and (max-width: 768px) {
+    
+    form {
+        margin: 0 1rem;
+    }
 }
