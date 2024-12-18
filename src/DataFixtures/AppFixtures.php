@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Comment;
 use App\Entity\Group;
 use App\Entity\Media;
 use App\Entity\Trick;
@@ -42,6 +43,7 @@ class AppFixtures extends Fixture
         $groups = $this->loadGroups();
         $tricks = $this->loadTricks($users, $groups);
         $medias = $this->loadMedias($tricks);
+        $comments = $this->loadComments($users, $tricks);
 
         $manager->flush();
     }
@@ -157,5 +159,29 @@ class AppFixtures extends Fixture
 
         return $entities;
 
+    }
+
+    /**
+     * @return Comment[]
+     */
+    protected function loadComments(array $users, array $tricks, int $count = 5): array
+    {
+        $entities = [];
+
+        foreach ($tricks as $trick) {
+            $nb_comments = $count - $this->faker->numberBetween(0, 3);
+            for ($i = 0; $i < $nb_comments; $i++) {
+                $comment = new Comment();
+                $comment->setMessage($this->faker->text());
+                $comment->setTrick($trick);
+                $comment->setUser($this->faker->randomElement($users));
+    
+                $entities[] = $comment;
+    
+                $this->manager->persist($comment);
+            }
+        }
+
+        return $entities;
     }
 }
