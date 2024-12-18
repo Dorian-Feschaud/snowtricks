@@ -79,6 +79,18 @@ class AppFixtures extends Fixture
 
         $this->manager->persist($user_2);
 
+        $user_3 = new User();
+        $user_3->setFirstname('Member');
+        $user_3->setLastname('Member');
+        $user_3->setEmail('member@example.com');
+        $user_3->setRoles(['ROLE_MEMBER']);
+        $user_3->setImage('user_default_pic.png');
+        $user_3->setPassword($this->hasher->hashPassword($user_3, 'member'));
+
+        $entities[] = $user_3;
+
+        $this->manager->persist($user_3);
+
         return $entities;
     }
 
