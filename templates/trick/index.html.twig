@@ -6,7 +6,9 @@
 
 <div class="index-trick-container">
     <h2 class="index-trick-title">LISTE DES FIGURES</h2>
+    {% if is_granted('ROLE_MODERATOR') %}
     <a class="add-trick" href="{{ path('app_trick_new') }}"><button class="add-trick-btn">Ajouter une figure</button></a>
+    {% endif %}
     <div class="tricks-container">
         {% for i in range(0, tricks|length - 1) %}
             {% set trick = tricks[i] %}
