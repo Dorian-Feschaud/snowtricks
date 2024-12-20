@@ -20,7 +20,7 @@ class Trick
     #[Assert\NotBlank()]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 2000)]
     #[Assert\NotBlank()]
     private ?string $description = null;
 
