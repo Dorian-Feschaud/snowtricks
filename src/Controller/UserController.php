@@ -83,7 +83,7 @@ class UserController extends AbstractController
                 $user->setImage($newFilename);
             }
             else {
-                $user->setImage('user_default-pic.png');
+                $user->setImage('user_default_pic.png');
             }
 
             /** @var string $plainPassword */
@@ -178,12 +178,12 @@ class UserController extends AbstractController
                 $user->setImage($newFilename);
             }
             else {
-                $user->setImage('user_default-pic.png');
+                $user->setImage('user_default_pic.png');
             }
             $manager->persist($user);
             $manager->flush();
 
-            return $this->redirectToRoute('app_user');
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -199,7 +199,7 @@ class UserController extends AbstractController
         $manager->remove($user);
         $manager->flush();
 
-        return $this->redirectToRoute('app_user');
+        return $this->redirectToRoute('app_default');
     }
     
 }
