@@ -125,7 +125,7 @@ class AppFixtures extends Fixture
             $trick = new Trick();
             $trick->setName(sprintf('Trick %s', $i));
             $trick->setSlug($this->slugger->slug($trick->getName()));
-            $trick->setDescription($this->faker->text());
+            $trick->setDescription($this->faker->text(2000));
             $trick->setThumbnail('default_trick_thumbnail.jpg');
             $trick->setGroupe($this->faker->randomElement($groups));
             $trick->setUser($this->faker->randomElement($users));
