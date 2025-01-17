@@ -93,7 +93,7 @@ class TrickController extends AbstractController
 
                 $filesystem = new Filesystem();
                 try {
-                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail->getImage();
+                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail;
                     $filesystem->remove($path);
                 }
                 catch (Exception $e) {
@@ -185,7 +185,7 @@ class TrickController extends AbstractController
 
                 $filesystem = new Filesystem();
                 try {
-                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail->getImage();
+                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail;
                     $filesystem->remove($path);
                 }
                 catch (Exception $e) {
