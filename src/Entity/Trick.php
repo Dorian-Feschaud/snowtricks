@@ -39,6 +39,7 @@ class Trick
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'trick', orphanRemoval: true)]
+    #[ORM\OrderBy(['created_at' => 'DESC'])]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
