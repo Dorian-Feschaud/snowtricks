@@ -21,7 +21,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     
-    Doctrine\Persistence\ObjectManager: '@doctrine.orm.default_entity_manager' 
+    Doctrine\Persistence\ObjectManager: '@doctrine.orm.default_entity_manager'
+    App\Service\FileUploader:
+        autowire: true
+        arguments: ['@slugger']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
