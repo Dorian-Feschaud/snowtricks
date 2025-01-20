@@ -6,14 +6,13 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -22,7 +21,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -51,7 +49,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, MailerInterface $mailer, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $mediasDirectory, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, FileUploader $fileUploader, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imagesDirectory, MailerInterface $mailer, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -59,28 +57,12 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var Collection<int, UploadedFile> $mediaFiles */
+            /** @var UploadedFile $imageFile */
             $imageFile = $form->get('image')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $extension = $imageFile->guessExtension();
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $imageFile->move($mediasDirectory, $newFilename);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-                $user->setImage($newFilename);
+                $filename = $fileUploader->uploadImage($imageFile, $imagesDirectory);
+                $user->setImage($filename);
             }
             else {
                 $user->setImage('user_default_pic.png');
@@ -89,7 +71,6 @@ class UserController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $user->setRoles(['ROLE_MEMBER']);
@@ -138,44 +119,21 @@ class UserController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_user_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MEMBER')]
-    public function edit(User $user, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $mediasDirectory, Request $request, EntityManagerInterface $manager): Response
+    public function edit(User $user, FileUploader $fileUploader, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imagesDirectory, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var Collection<int, UploadedFile> $mediaFiles */
+            /** @var UploadedFile $imageFile */
             $imageFile = $form->get('image')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $extension = $imageFile->guessExtension();
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $imageFile->move($mediasDirectory, $newFilename);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-
-                $filesystem = new Filesystem();
-                try {
-                    $path = $this->getParameter("public_directory") . '/uploads/images/' . $user->getImage();
-                    $filesystem->remove($path);
-                }
-                catch (Exception $e) {
-                    throw new Exception();
-                }
-                $user->setImage($newFilename);
+                $path = $this->getParameter("public_directory") . '/uploads/images/' . $user->getImage();
+                $fileUploader->removeImage($path);
+                $filename = $fileUploader->uploadImage($imageFile, $imagesDirectory);
+                $user->setImage($filename);
             }
             else {
                 $user->setImage('user_default_pic.png');
