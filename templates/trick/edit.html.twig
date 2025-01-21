@@ -23,6 +23,8 @@
     {% else %}
         <p>Le fichier n'est pas reconnu</p>
     {% endif %}
+    <label for="media-{{ media.id }}">Supprimé ?</label>
+    <input id="media-{{ media.id }}" name="deleted-files[]" type="checkbox" value="{{ media.id }}">
 {% endfor %}
 </div>
 <button type="submit" class="form-submit">Envoyer</button>
