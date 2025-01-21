@@ -52,6 +52,12 @@ form {
 
 .form-existing-medias > img, .form-existing-medias > video, .user-profil-pic {
     width: 200px;
+    object-fit: cover;
+}
+
+.form-media-item {
+    display: flex;
+    flex-direction: column;
 }
 
 textarea {

@@ -14,17 +14,19 @@
 {{ form_row(form.medias) }}
 <div class="form-existing-medias">
 {% for media in trick.medias %}
-    {% if media.type == 'TYPE_IMAGE' %}
-        <img src="{{ asset(media.filename, 'medias') }}"/>
-    {% elseif media.type == 'TYPE_VIDEO' %}
-        <video controls>
-            <source src="{{ asset(media.filename, 'medias') }}" type="video/mp4"/>
-        </video>
-    {% else %}
-        <p>Le fichier n'est pas reconnu</p>
-    {% endif %}
-    <label for="media-{{ media.id }}">Supprimé ?</label>
-    <input id="media-{{ media.id }}" name="deleted-files[]" type="checkbox" value="{{ media.id }}">
+    <div class="form-media-item">
+        {% if media.type == 'TYPE_IMAGE' %}
+            <img src="{{ asset(media.filename, 'medias') }}"/>
+        {% elseif media.type == 'TYPE_VIDEO' %}
+            <video controls>
+                <source src="{{ asset(media.filename, 'medias') }}" type="video/mp4"/>
+            </video>
+        {% else %}
+            <p>Le fichier n'est pas reconnu</p>
+        {% endif %}
+        <label for="media-{{ media.id }}">Supprimer ?</label>
+        <input id="media-{{ media.id }}" name="deleted-files[]" type="checkbox" value="{{ media.id }}">
+    </div>
 {% endfor %}
 </div>
 <button type="submit" class="form-submit">Envoyer</button>
