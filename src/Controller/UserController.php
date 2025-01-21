@@ -61,7 +61,7 @@ class UserController extends AbstractController
             $imageFile = $form->get('image')->getData();
 
             if ($imageFile) {
-                $filename = $fileUploader->uploadImage($imageFile, $imagesDirectory);
+                $filename = $fileUploader->uploadFile($imageFile, $imagesDirectory);
                 $user->setImage($filename);
             }
             else {
@@ -131,8 +131,8 @@ class UserController extends AbstractController
 
             if ($imageFile) {
                 $path = $this->getParameter("public_directory") . '/uploads/images/' . $user->getImage();
-                $fileUploader->removeImage($path);
-                $filename = $fileUploader->uploadImage($imageFile, $imagesDirectory);
+                $fileUploader->removeFile($path);
+                $filename = $fileUploader->uploadFile($imageFile, $imagesDirectory);
                 $user->setImage($filename);
             }
             else {
