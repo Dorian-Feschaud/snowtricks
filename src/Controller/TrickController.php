@@ -134,7 +134,7 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Modification de la figure bien efféctué');
 
-            $deletedFiles = $request->get('deleted-files');
+            $deletedFiles = (null !== $request->get('deleted-files') ? $request->get('deleted-files') : []);
 
             foreach($deletedFiles as $file) {
                 $media = $manager->getRepository(Media::class)->findOneById($file);
