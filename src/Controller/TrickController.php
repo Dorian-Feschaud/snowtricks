@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Media;
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -59,7 +60,7 @@ class TrickController extends AbstractController
 
     #[Route('/new', name: 'app_trick_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
-    public function new(Request $request, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, EntityManagerInterface $manager): Response
+    public function new(Request $request, SluggerInterface $slugger, FileUploader $fileUploader, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, EntityManagerInterface $manager): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -72,34 +73,9 @@ class TrickController extends AbstractController
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($thumbnail) {
-                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $extension = $thumbnail->guessExtension();
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $thumbnail->move($mediasDirectory, $newFilename);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-
-                $filesystem = new Filesystem();
-                try {
-                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail;
-                    $filesystem->remove($path);
-                }
-                catch (Exception $e) {
-                    throw new Exception();
-                }
-                $trick->setThumbnail($newFilename);
+                $filename = $fileUploader->uploadFile($thumbnail, $thumbnailsDirectory);
+                $trick->setThumbnail($filename);
             }
             else {
                 $trick->setThumbnail('default_trick_thumbnail.jpg');
@@ -111,18 +87,14 @@ class TrickController extends AbstractController
             if ($mediaFiles) {
                 foreach($mediaFiles as $mediaFile) {
                     $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
                     $extension = $mediaFile->guessExtension();
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                    try {
-                        $mediaFile->move($thumbnailsDirectory, $newFilename);
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
-                    }
                     $media = new Media();
                     $media->setOriginalFilename($originalFilename.$extension);
-                    $media->setFilename($newFilename);
+                
+                    $filename = $fileUploader->uploadFile($mediaFile, $mediasDirectory);
+                    $media->setFilename($filename);
+                    
+                    
                     if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
                         $media->setType(Media::TYPE_IMAGE);
                     }
@@ -132,6 +104,7 @@ class TrickController extends AbstractController
                     else {
                         $media->setType(Media::TYPE_UNKNOWN);
                     }
+
                     $manager->persist($media);
                     $trick->addMedia($media);
                 }
@@ -152,7 +125,7 @@ class TrickController extends AbstractController
 
     #[Route('/{slug}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MODERATOR')]
-    public function edit(Trick $trick, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, Request $request, EntityManagerInterface $manager): Response
+    public function edit(Trick $trick, SluggerInterface $slugger, FileUploader $fileUploader, #[Autowire('%kernel.project_dir%/public/uploads/medias')] string $mediasDirectory, #[Autowire('%kernel.project_dir%/public/uploads/thumbnails')] string $thumbnailsDirectory, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -164,37 +137,11 @@ class TrickController extends AbstractController
             /** @var UploadedFile $thumbnail */
             $thumbnail = $form->get('thumbnail')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($thumbnail) {
-                $originalFilename = pathinfo($thumbnail->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $extension = $thumbnail->guessExtension();
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $thumbnail->move($thumbnailsDirectory, $newFilename);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-
-                $filesystem = new Filesystem();
-                try {
-                    $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $thumbnail;
-                    $filesystem->remove($path);
-                }
-                catch (Exception $e) {
-                    throw new Exception();
-                }
-                $trick->setThumbnail($newFilename);
-            }
-            else {
-                $trick->setThumbnail('default_trick_thumbnail.jpg');
+                $path = $this->getParameter("public_directory") . '/uploads/thumbnails/' . $trick->getThumbnail();
+                $fileUploader->removeFile($path);
+                $filename = $fileUploader->uploadFile($thumbnail, $thumbnailsDirectory);
+                $trick->setThumbnail($filename);
             }
 
             /** @var Collection<int, UploadedFile> $mediaFiles */
@@ -203,15 +150,7 @@ class TrickController extends AbstractController
             if ($mediaFiles) {
                 foreach($mediaFiles as $mediaFile) {
                     $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
                     $extension = $mediaFile->guessExtension();
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
-
-                    try {
-                        $mediaFile->move($mediasDirectory, $newFilename);
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
-                    }
 
                     $media = $manager->getRepository(Media::class)->findOneBy(array('original_filename' => $originalFilename, 'trick' => $trick));
                     if (!$media) {
@@ -219,16 +158,13 @@ class TrickController extends AbstractController
                         $media->setOriginalFilename($originalFilename.$extension);
                     }
                     else {
-                        $filesystem = new Filesystem();
-                        try {
-                            $path = $this->getParameter("public_directory") . '/uploads/medias/' . $media->getFilename();
-                            $filesystem->remove($path);
-                        }
-                        catch (Exception $e) {
-                            throw new Exception();
-                        }
+                        $path = $this->getParameter("public_directory") . '/uploads/medias/' . $media->getFilename();
+                        $fileUploader->removeFile($path);
                     }
-                    $media->setFilename($newFilename);
+
+                    $filename = $fileUploader->uploadFile($mediaFile, $mediasDirectory);
+                    $media->setFilename($filename);
+
                     if (in_array($extension, ['png', 'jpg', 'jpeg'])) {
                         $media->setType(Media::TYPE_IMAGE);
                     }
@@ -238,6 +174,7 @@ class TrickController extends AbstractController
                     else {
                         $media->setType(Media::TYPE_UNKNOWN);
                     }
+
                     $manager->persist($media);
                     $trick->addMedia($media);
                 }
