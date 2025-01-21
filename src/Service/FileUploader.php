@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use Exception;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,7 +17,7 @@ class FileUploader {
         $this->slugger = $slugger;
     }
 
-    public function uploadImage(UploadedFile $imageFile, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imagesDirectory):String
+    public function uploadFile(UploadedFile $imageFile, string $directory):String
     {
         $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
@@ -26,7 +25,7 @@ class FileUploader {
         $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
 
         try {
-            $imageFile->move($imagesDirectory, $newFilename);
+            $imageFile->move($directory, $newFilename);
         } catch (FileException $e) {
 
         }
@@ -34,7 +33,7 @@ class FileUploader {
         return $newFilename;
     }
 
-    public function removeImage(String $path):void
+    public function removeFile(String $path):void
     {
         $filesystem = new Filesystem();
         try {
