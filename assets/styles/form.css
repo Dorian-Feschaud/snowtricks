@@ -50,14 +50,16 @@ form {
     gap: 2rem;
 }
 
-.form-existing-medias > img, .form-existing-medias > video, .user-profil-pic {
+.form-media-item > img, .form-media-item > video, .user-profil-pic {
     width: 200px;
+    height: 200px;
     object-fit: cover;
 }
 
 .form-media-item {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 textarea {
