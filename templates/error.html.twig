@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur{% endblock %}
+
+{% block body %}
+
+<div class="error-container">
+    <h1 class="error-title">Oups... Il semblerait que vous ayez rencontré une erreur</h1>
+    <a class="error-link" href="{{ path('app_default') }}"><button class="error-btn">Revenir à l'accueil</button></a>
+</div>
+
+{% endblock %}
