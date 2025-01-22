@@ -1,0 +1,21 @@
+.tricks-pagination {
+    display: flex;
+    gap: 1rem;
+}
+
+.tricks-page {
+    color: #546A7B;
+    text-decoration: none;
+    border: solid 1px #546A7B;
+    height: 20px;
+    width: 20px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active-tricks-page {
+    background-color: #546A7B;
+    color: white;
+}

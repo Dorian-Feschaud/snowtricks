@@ -32,6 +32,15 @@
             </div>
         {% endfor %}
     </div>
+    <div class="tricks-pagination">
+        {% for i in range(1, max_page) %}
+            {% if i == current_page %}
+                <a class="tricks-page active-tricks-page" href="{{ path('app_trick', {'page': i}) }}">{{ i }}</a>
+            {% else %}
+                <a class="tricks-page" href="{{ path('app_trick', {'page': i}) }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

@@ -25,13 +25,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
-    #[Route('', name: 'app_trick')]
-    public function index(TrickRepository $trick_repository): Response
+    #[Route('', name: 'app_trick', methods: ['GET'])]
+    public function index(TrickRepository $trick_repository, Request $request): Response
     {
-        $tricks = $trick_repository->findAll();
+        $maxPage = round(count($trick_repository->findAll()) / 10, 0, PHP_ROUND_HALF_DOWN) + 1;
+
+        $page = (null !== $request->get('page') ? $request->get('page') : 1);
+
+        $tricks = $trick_repository->findByPage($page);
 
         return $this->render('trick/index.html.twig', [
             'tricks' => $tricks,
+            'max_page' => $maxPage,
+            'current_page' => $page
         ]);
     }
 

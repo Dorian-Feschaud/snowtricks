@@ -16,6 +16,18 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
+    public function findByPage($value): array
+    {
+        $firstResult = $value * 12 - 12;
+        return $this->createQueryBuilder('t')
+           ->orderBy('t.id', 'ASC')
+           ->setFirstResult($firstResult)
+           ->setMaxResults(12)
+           ->getQuery()
+           ->getResult()
+       ;
+    }
+
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */
