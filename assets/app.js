@@ -14,3 +14,4 @@ import './styles/form.css';
 import './styles/reset-password.css';
 import './styles/user.css';
 import './styles/group.css';
+import './styles/pagination.css';
