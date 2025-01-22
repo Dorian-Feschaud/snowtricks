@@ -102,6 +102,7 @@
             "./assets/styles/user.css",
             "./assets/styles/group.css",
             "./assets/styles/pagination.css",
+            "./assets/styles/error.css",
             "./config/packages/asset_mapper.yaml",
             "./importmap.php"
         ]
